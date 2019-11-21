@@ -4,9 +4,9 @@ import telegram
 import time
 import os
 
-TOKEN_BOT = os.environ('TOKEN_BOT')
-TOKEN_API = os.environ('TOKEN_API')
-CHAT_ID = os.environ('CHAT_ID')
+TOKEN_BOT = os.environ.get('TOKEN_BOT')
+TOKEN_API = os.environ.get('TOKEN_API')
+CHAT_ID = os.environ.get('CHAT_ID')
 
 
 def main():
