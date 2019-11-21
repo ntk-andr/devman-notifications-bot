@@ -3,6 +3,7 @@ from requests.exceptions import ReadTimeout, ConnectionError
 import telegram
 import time
 import os
+import logging
 
 TOKEN_BOT = os.environ.get('TOKEN_BOT')
 TOKEN_API = os.environ.get('TOKEN_API')
@@ -10,8 +11,9 @@ CHAT_ID = os.environ.get('CHAT_ID')
 
 
 def main():
+    logging.basicConfig(level=logging.DEBUG)
     bot = telegram.Bot(token=TOKEN_BOT)
-
+    logging.info('бот запущен')
     data_headers = {
         'Authorization': 'Token ' + TOKEN_API
     }
@@ -52,9 +54,9 @@ def main():
             time.sleep(1)
 
         except ReadTimeout:
-            print('превышено время ожидания')
+            logging.warning('превышено время ожидания')
         except ConnectionError:
-            print('нет соединения с интернетом')
+            logging.warning('нет соединения с интернетом')
         except KeyError:
             continue
 
