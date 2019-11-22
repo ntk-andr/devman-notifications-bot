@@ -14,8 +14,10 @@ def main():
     logger = logging.getLogger('NOTICE')
     logger.setLevel(logging.DEBUG)
     logging.basicConfig(filename='app.log', format='[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]')
-    logger.addHandler(LoggerHandler())
+
     bot = telegram.Bot(token=TOKEN_BOT)
+
+    logger.addHandler(LoggerHandler(bot=bot))
     logger.info('Бот успешно запущен')
     data_headers = {
         'Authorization': 'Token ' + TOKEN_API
@@ -65,8 +67,14 @@ def main():
 
 
 class LoggerHandler(logging.Handler):
+
+    def __init__(self, bot):
+        super().__init__()
+        self.bot = bot
+
     def emit(self, record):
         log_entry = self.format(record)
+        self.bot.send_message(chat_id=CHAT_ID, text=log_entry)
 
 
 if __name__ == '__main__':
