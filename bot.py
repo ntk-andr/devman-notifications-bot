@@ -11,9 +11,12 @@ CHAT_ID = os.environ.get('CHAT_ID')
 
 
 def main():
-    logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger('NOTICE')
+    logger.setLevel(logging.DEBUG)
+    logging.basicConfig(filename='app.log', format='[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]')
+    logger.addHandler(LoggerHandler())
     bot = telegram.Bot(token=TOKEN_BOT)
-    logging.info('бот запущен')
+    logger.info('Бот успешно запущен')
     data_headers = {
         'Authorization': 'Token ' + TOKEN_API
     }
@@ -54,11 +57,16 @@ def main():
             time.sleep(1)
 
         except ReadTimeout:
-            logging.warning('превышено время ожидания')
+            logger.warning('превышено время ожидания')
         except ConnectionError:
-            logging.warning('нет соединения с интернетом')
+            logger.warning('нет соединения с интернетом')
         except KeyError:
             continue
+
+
+class LoggerHandler(logging.Handler):
+    def emit(self, record):
+        log_entry = self.format(record)
 
 
 if __name__ == '__main__':
