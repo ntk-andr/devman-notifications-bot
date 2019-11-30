@@ -26,9 +26,13 @@ def main():
     request_params = {}
     logger = logging.getLogger('NOTICE')
     logger.setLevel(logging.DEBUG)
-    logging.basicConfig(filename='app.log', format='[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]')
+    log_format = '[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]'
+    logging.basicConfig(filename='app.log', format=log_format)
     logger.addHandler(LoggerHandler(bot=bot))
-    logger.addHandler(logging.StreamHandler(stream=sys.stdout))
+    log_formatter = logging.Formatter(log_format)
+    stream_handler = logging.StreamHandler(stream=sys.stdout)
+    stream_handler.setFormatter(log_formatter)
+    logger.addHandler(stream_handler)
     logger.info('Бот успешно запущен')
 
     while True:
