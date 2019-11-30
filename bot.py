@@ -3,6 +3,7 @@ from requests.exceptions import ReadTimeout, ConnectionError
 import telegram
 import time
 import os
+import sys
 import logging
 
 TOKEN_BOT = os.environ.get('TOKEN_BOT')
@@ -27,6 +28,7 @@ def main():
     logger.setLevel(logging.DEBUG)
     logging.basicConfig(filename='app.log', format='[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]')
     logger.addHandler(LoggerHandler(bot=bot))
+    logger.addHandler(logging.StreamHandler(stream=sys.stdout))
     logger.info('Бот успешно запущен')
 
     while True:
@@ -86,7 +88,6 @@ class LoggerHandler(logging.Handler):
 
     def emit(self, record):
         log_entry = self.format(record)
-        print(log_entry)
         self.bot.send_message(chat_id=CHAT_ID, text=log_entry)
 
 
