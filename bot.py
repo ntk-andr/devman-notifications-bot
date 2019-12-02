@@ -21,21 +21,9 @@ long_polling = BASE_URL_API + 'long_polling/'
 
 bot = telegram.Bot(token=TOKEN_BOT)
 
-log_format = '[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]'
-
-logging.basicConfig(filename='app.log', format=log_format)
-log_formatter = logging.Formatter(log_format)
-
-stream_handler = logging.StreamHandler(stream=sys.stdout)
-stream_handler.setFormatter(log_formatter)
-
-logger = logging.getLogger('NOTICE')
-logger.setLevel(logging.DEBUG)
-
-logger.addHandler(stream_handler)
-
 
 def main():
+    logger = get_logger()
     request_params = {}
 
     logger.addHandler(LoggerHandler(bot=bot))
@@ -68,6 +56,22 @@ def main():
         except Exception:
             logger.exception(msg='Бот упал с ошибкой:', exc_info=True)
             time.sleep(10)
+
+
+def get_logger():
+    log_format = '[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]'
+
+    logging.basicConfig(filename='app.log', format=log_format)
+    log_formatter = logging.Formatter(log_format)
+
+    stream_handler = logging.StreamHandler(stream=sys.stdout)
+    stream_handler.setFormatter(log_formatter)
+
+    logger = logging.getLogger('NOTICE')
+    logger.setLevel(logging.DEBUG)
+
+    logger.addHandler(stream_handler)
+    return logger
 
 
 def get_timestamp(status, dict_response):
