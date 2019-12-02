@@ -21,21 +21,24 @@ long_polling = BASE_URL_API + 'long_polling/'
 
 bot = telegram.Bot(token=TOKEN_BOT)
 
+log_format = '[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]'
+
+logging.basicConfig(filename='app.log', format=log_format)
+log_formatter = logging.Formatter(log_format)
+
+stream_handler = logging.StreamHandler(stream=sys.stdout)
+stream_handler.setFormatter(log_formatter)
 
 logger = logging.getLogger('NOTICE')
 logger.setLevel(logging.DEBUG)
-log_format = '[%(asctime)s] : %(name)s : %(levelname)s : [%(message)s]'
-logging.basicConfig(filename='app.log', format=log_format)
-log_formatter = logging.Formatter(log_format)
-stream_handler = logging.StreamHandler(stream=sys.stdout)
-stream_handler.setFormatter(log_formatter)
+
 logger.addHandler(stream_handler)
 
 
 def main():
     request_params = {}
-    logger.addHandler(LoggerHandler(bot=bot))
 
+    logger.addHandler(LoggerHandler(bot=bot))
     logger.info('Бот успешно запущен')
 
     while True:
